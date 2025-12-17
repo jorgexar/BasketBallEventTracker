@@ -5,6 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
+        .hidden{
+            display: none;
+        }
+        .eventMenu{
+            position: absolute;
+            
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 5px;
+            border-radius: 0px 5px 5px 5px;
+            border: 2px solid white;
+        }
+        
+        .eventMenu button{
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-family: 'Courier New', Courier, monospace;
+            cursor: pointer;
+            
+        }
         .cords{
             background-color: black;
             display: inline;
@@ -79,6 +101,11 @@
         <!-- <img id="court-top" id="court" src="half-court.jpg" alt="half court top down view" srcset=""> -->
     </div>
     
+    <div class="eventMenu" id="eventMenu">
+        <button class="score">Score</button>
+        <button class="miss">Miss</button>
+        <button class="block">Block</button>
+    </div>
 </body>
 <script>
     // document.addEventListener('mousemove',function(event){
@@ -87,13 +114,32 @@
     let printTag = document.getElementById("print");
     const cords = document.getElementById("cords");
     const court = document.getElementById("court");
+    const eventMenu = document.getElementById("eventMenu");
+    eventMenu.style.display = "none";
+    const eventButtons = eventMenu.children;
+    let lastPoint;
+    for(let i=0; i< eventButtons.length;i++){
+        eventButtons[i].addEventListener("click",()=>{
+            let eventResult = event.target.innerText;
+
+            lastPoint = court.children[court.children.length-1];
+            lastPoint.className = `point ${String(eventResult).toLowerCase()}`;
+            eventMenu.style.display = "none";
+        })
+    }
+    
+
     court.addEventListener('mousemove',function(event){
         // console.log(`Mouse X: ${event.clientX} Mouse Y: ${event.clientY}`);
         printTag.innerText = `Mouse X: ${event.offsetX} Mouse Y: ${event.offsetY}`;
     })
     let points = [];
     let id = 1;
+
+    
+    
     court.addEventListener("mousedown",function(event){
+        eventMenu.style.display="flex"
         let point = document.createElement("div");
         point.innerText = id;
         id++;
@@ -110,6 +156,8 @@
 
         }
         points.push(newEvent);
+        eventMenu.style.left = (event.clientX + 20) + "px";
+        eventMenu.style.top = event.clientY + "px";
     })
     function avgPos(pts){
         let totalX=0;
