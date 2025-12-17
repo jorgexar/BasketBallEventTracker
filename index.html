@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .cords{
+            background-color: black;
+            display: inline;
+            color: #fff;
+            padding: 5px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+        }
+        .wrapper{
+            display: flex;
+            flex-direction: column;
+            
+        }
+        .eventList{
+            background-color: rgb(99, 25, 25);
+            flex-grow: 1;
+        }
+        #court{
+            position: absolute;
+            background-image: url(half-vertical.jpg);
+            min-width: 780px;
+            min-height: 725px;
+            background-size:contain;
+            background-position: center;
+            background-repeat: no-repeat ;
+            background-color: black;
+
+        }
+        .point{
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgb(161, 161, 161);
+            /* z-index: 99; */
+            border: 1px solid black;
+            text-align: center;
+            font-weight: 600;
+            transform: translate(-10px, -10px) ;
+            pointer-events: none;
+        }
+        .score{
+            background-color: rgb(64, 255, 47);
+            left: 100px;            
+            border-radius: 100%;
+        }
+        .miss{
+            background-color: red;
+            
+        }
+        .block{
+            background-color: rgb(245, 220, 0);
+        }
+        #p1{
+            left: 0;
+            top: 0;
+        }
+    </style>
+</head>
+<body style="background-color: rgb(76, 95, 110);">
+    
+    <h1 id="print">COrds</h1>
+    <div class="cord">
+        
+    </div>
+    <!-- <div class="point"></div>
+    <div class="point score"></div>
+    <div class="point miss"></div>
+    <div class="point block"></div> -->
+    <div id="court">
+        <!-- <div class="point" id="p1"></div> -->
+        <!-- <img id="court-top" id="court" src="half-court.jpg" alt="half court top down view" srcset=""> -->
+    </div>
+    
+</body>
+<script>
+    // document.addEventListener('mousemove',function(event){
+    //     console.log(`Mouse X: ${event.clientX} Mouse Y: ${event.clientY}`);
+    // })
+    let printTag = document.getElementById("print");
+    const cords = document.getElementById("cords");
+    const court = document.getElementById("court");
+    court.addEventListener('mousemove',function(event){
+        // console.log(`Mouse X: ${event.clientX} Mouse Y: ${event.clientY}`);
+        printTag.innerText = `Mouse X: ${event.offsetX} Mouse Y: ${event.offsetY}`;
+    })
+    let points = [];
+    let id = 1;
+    court.addEventListener("mousedown",function(event){
+        let point = document.createElement("div");
+        point.innerText = id;
+        id++;
+        point.classList = "point";
+        point.style.left = event.offsetX+ "px";
+        point.style.top = event.offsetY + "px";
+        // point.style.zIndex = id;
+        court.appendChild(point);
+        // console.log(point);
+        let newEvent = {
+            eventId : id,
+            posX : event.offsetX,
+            posY : event.offsetY,
+
+        }
+        points.push(newEvent);
+    })
+    function avgPos(pts){
+        let totalX=0;
+        let totalY=0;
+        let avgX;
+        let avgY;
+        for(let i=0; i<pts.length; i++){
+            totalX += pts[i].posX;
+            totalY += pts[i].posY;
+        }
+        avgX = Math.floor(totalX / pts.length);
+        avgY = Math.floor(totalY / pts.length);
+        return `Avg X: ${avgX}  Avg Y: ${avgY}`;
+        
+    }
+
+</script>
+</html>
